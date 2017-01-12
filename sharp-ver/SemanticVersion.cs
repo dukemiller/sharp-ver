@@ -75,7 +75,7 @@ namespace sharp_ver
                 if (action == SemanticAction.Increase)
                     Major++;
                 else
-                    Minor--;
+                    Major--;
         }
 
         public override string ToString() => $"{Major}.{Minor}.{Patch}";
