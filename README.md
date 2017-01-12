@@ -1,6 +1,6 @@
 # sharp-ver
 
-A command line tool for incrementing the version number in a C# WPF project in a semver style. This will perform the changes to the AssemblyInfo.cs that contain version numbers. In the case of there being four digits in the version, it interpret from the leftmost three values. The idea is that you put this on your **$PATH** and call it in the **Solution** directory, where changes will be done and then staged on git.
+A command line tool for incrementing the version number in a C# visual studio project in a semver style. This will perform the changes to the AssemblyInfo.cs that contain version numbers. In the case of there being four digits in the version, it interpret from the leftmost three values. The idea is that you put this on your **$PATH** and call it in the **Solution** directory, where changes will be done and then staged on git.
 
 **Arguments**: {solution-path} {version-tier} {action}  
 --solution-path = A path to a solution directory  
@@ -10,9 +10,18 @@ A command line tool for incrementing the version number in a C# WPF project in a
 ### Basic example 
 
 ````
-sv minor
+sv major
 # Before: [assembly: AssemblyVersion("0.0.1.*")]
-# After:  [assembly: AssemblyVersion("0.1.0.*")]
+# After:  [assembly: AssemblyVersion("1.0.0.*")]
+sv minor 
+# Before: [assembly: AssemblyVersion("1.0.0.*")]
+# After:  [assembly: AssemblyVersion("1.1.0.*")]
+sv patch
+# Before: [assembly: AssemblyVersion("1.1.0.*")]
+# After:  [assembly: AssemblyVersion("1.1.1.*")]
+sv minor dec
+# Before: [assembly: AssemblyVersion("1.1.1.*")]
+# After:  [assembly: AssemblyVersion("1.0.0.*")]
 ````
 
 ---
