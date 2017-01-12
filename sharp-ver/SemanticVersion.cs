@@ -18,11 +18,8 @@ namespace sharp_ver
             set
             {
                 value = Math.Max(value, 0);
-                if (value > _major)
-                {
-                    Minor = 0;
-                    Patch = 0;
-                }
+                Minor = 0;
+                Patch = 0;
                 _major = value;
             }
         }
@@ -33,8 +30,7 @@ namespace sharp_ver
             set
             {
                 value = Math.Max(value, 0);
-                if (value > _minor)
-                    Patch = 0;
+                Patch = 0;
                 _minor = value;
             }
         }
