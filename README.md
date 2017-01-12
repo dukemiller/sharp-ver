@@ -19,13 +19,12 @@ sv minor
 
 ### Build & Run
 
-**Requirements:** [nuget.exe](https://dist.nuget.org/win-x86-commandline/latest/nuget.exe) on PATH, Visual Studio 2015 and/or C# 6.0 Roslyn Compiler  
+**Requirements:** Visual Studio 2015 and/or C# 6.0 Roslyn Compiler  
 **Optional:** Devenv (Visual Studio 2015) on PATH  
 
 ```
 git clone https://github.com/dukemiller/sharp-ver
 cd sharp-ver
-nuget install sharp-ver\packages.config -OutputDirectory packages
 ```  
 
 **Building with Devenv (CLI):** ``devenv sharp-ver.sln /Build``  
