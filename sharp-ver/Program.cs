@@ -8,6 +8,9 @@ namespace sharp_ver
 {
     public static class Program
     {
+        /// <summary>
+        ///     The directory where this program is being called from
+        /// </summary>
         private static string ExecutingDirectory => Directory.GetCurrentDirectory();
 
         /// <summary>
@@ -35,14 +38,23 @@ namespace sharp_ver
 
             // Path
             if (!Directory.Exists(ExecutingDirectory))
+            {
+                result.ErrorMessage = "This is somehow called in a directory that does not exist.";
                 return result;
+            }
             var sln = Directory.GetFiles(ExecutingDirectory).FirstOrDefault(f => f.EndsWith(".sln"));
             if (sln == null)
+            {
+                result.ErrorMessage = "Current executing folder is not a solution directory.";
                 return result;
+            }
             var folder = sln.Split(Path.DirectorySeparatorChar).Last().Split('.').Reverse().Skip(1).First();
             var path = Path.GetFullPath(Path.Combine(ExecutingDirectory, folder, "Properties", "AssemblyInfo.cs"));
             if (!File.Exists(path))
+            {
+                result.ErrorMessage = "The path to AssemblyInfo.cs is not clear.";
                 return result;
+            }
             result.Path = path;
 
             // Tier
@@ -53,7 +65,10 @@ namespace sharp_ver
             else if (args.Tier.Equals("major"))
                 result.VersionTier = SemanticVersionTier.Major;
             else
+            {
+                result.ErrorMessage = "Incorrect input for argument \"version-tier\".";
                 return result;
+            }
 
             // Action
             if (Regex.IsMatch(args.Action, AddPattern))
@@ -61,10 +76,12 @@ namespace sharp_ver
             else if (Regex.IsMatch(args.Action, SubtractPattern))
                 result.Action = SemanticAction.Decrease;
             else
+            {
+                result.ErrorMessage = "Incorrect input for argument \"action\".";
                 return result;
+            }
 
             result.Successful = true;
-
             return result;
         }
 
@@ -102,22 +119,24 @@ namespace sharp_ver
 
         public static void Main(string[] args)
         {
-            const string argExample = "version-tier [action]\n" +
+            const string argExample = "Arguments: version-tier [action]\n" +
                                       "--version-tier  = patch | minor | major           ->  the semvar version tier to update\n" +
                                       "--action        = add/increase | reduce/decrease  ->  the action to perform on that tier\n" +
                                       "                  [by default will add]";
-            var notCorrectArgs = $"Incorrect number of arguments. Arguments: {argExample}";
-            var invalidArgs = $"Invalid argument parameters. Arguments: {argExample}";
+            var notCorrectArgs = $"Incorrect number of arguments. {argExample}";
 
             // get args
 
-            if (args.Length == 0 || args.Length > 2)
+            if (args.Length == 0)
+                ExitMessage(argExample);
+
+            else if (args.Length > 2)
                 ExitMessage(notCorrectArgs);
 
             var result = VerifyArgs(new ParseArgs(args));
 
             if (!result.Successful)
-                ExitMessage(invalidArgs);
+                ExitMessage(result.ErrorMessage);
 
             // Find and replace the lines
 
