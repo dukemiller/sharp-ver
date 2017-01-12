@@ -102,7 +102,7 @@ namespace sharp_ver
 
         public static void Main(string[] args)
         {
-            const string argExample = "{version-tier} {action [optional]}\n" +
+            const string argExample = "version-tier [action]\n" +
                                       "--version-tier  = patch | minor | major           ->  the semvar version tier to update\n" +
                                       "--action        = add/increase | reduce/decrease  ->  the action to perform on that tier\n" +
                                       "                  [by default will add]";
