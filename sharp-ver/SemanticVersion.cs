@@ -19,7 +19,10 @@ namespace sharp_ver
             {
                 value = Math.Max(value, 0);
                 if (value > _major)
+                {
                     Minor = 0;
+                    Patch = 0;
+                }
                 _major = value;
             }
         }
