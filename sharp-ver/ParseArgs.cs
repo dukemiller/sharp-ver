@@ -8,12 +8,10 @@ namespace sharp_ver
         public ParseArgs(IEnumerable<string> args)
         {
             var argList = args.Select(a => a.ToLower()).ToList();
-            Path = argList[0];
-            Tier = argList[1];
-            Action = argList[2];
+            Tier = argList[0];
+            Action = argList.Count > 1 ? argList[1] : "add";
         }
 
-        public string Path { get; set; }
         public string Tier { get; set; }
         public string Action { get; set; }
     }

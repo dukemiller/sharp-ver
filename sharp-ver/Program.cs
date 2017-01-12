@@ -8,6 +8,8 @@ namespace sharp_ver
 {
     public static class Program
     {
+        private static string ExecutingDirectory => Directory.GetCurrentDirectory();
+
         /// <summary>
         ///     The pattern in assemblyinfo that lists the version
         /// </summary>
@@ -32,13 +34,13 @@ namespace sharp_ver
             var result = new ParseResult {Successful = false};
 
             // Path
-            if (!Directory.Exists(args.Path))
+            if (!Directory.Exists(ExecutingDirectory))
                 return result;
-            var sln = Directory.GetFiles(args.Path).FirstOrDefault(f => f.EndsWith(".sln"));
+            var sln = Directory.GetFiles(ExecutingDirectory).FirstOrDefault(f => f.EndsWith(".sln"));
             if (sln == null)
                 return result;
             var folder = sln.Split(Path.DirectorySeparatorChar).Last().Split('.').Reverse().Skip(1).First();
-            var path = Path.GetFullPath(Path.Combine(args.Path, folder, "Properties", "AssemblyInfo.cs"));
+            var path = Path.GetFullPath(Path.Combine(ExecutingDirectory, folder, "Properties", "AssemblyInfo.cs"));
             if (!File.Exists(path))
                 return result;
             result.Path = path;
@@ -100,16 +102,16 @@ namespace sharp_ver
 
         public static void Main(string[] args)
         {
-            const string argExample = "{solution-path} {version-tier} {action}\n" +
-                                      "--solution-path = A path to a solution directory\n" +
-                                      "--version-tier  = patch|minor|major, the semvar version VersionTier to update\n" +
-                                      "--action        = add/increase | reduce/decrease, the action to perform on that tier";
+            const string argExample = "{version-tier} {action [optional]}\n" +
+                                      "--version-tier  = patch | minor | major           ->  the semvar version tier to update\n" +
+                                      "--action        = add/increase | reduce/decrease  ->  the action to perform on that tier\n" +
+                                      "                  [by default will add]";
             var notCorrectArgs = $"Incorrect number of arguments. Arguments: {argExample}";
             var invalidArgs = $"Invalid argument parameters. Arguments: {argExample}";
 
             // get args
 
-            if (args.Length != 3)
+            if (args.Length == 0 || args.Length > 2)
                 ExitMessage(notCorrectArgs);
 
             var result = VerifyArgs(new ParseArgs(args));
@@ -135,8 +137,7 @@ namespace sharp_ver
             // Write and add to git
 
             File.WriteAllLines(result.Path, lines);
-            Git(args.First());
+            Git(ExecutingDirectory);
         }
-
     }
 }
