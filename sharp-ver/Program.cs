@@ -140,14 +140,18 @@ namespace sharp_ver
 
             // Find and replace the lines
 
+            string older = "", newer = "";
+
             var lines = File.ReadAllLines(result.Path).Select(line =>
             {
                 var find = Regex.Matches(line, Pattern).Cast<Match>().ToList();
                 if (find.Count > 0)
                 {
                     var group = find.First().Groups.Cast<Group>().Skip(1).First().ToString();
+                    older = group;
                     var version = new SemanticVersion(group);
                     version.DoCommand(result.VersionTier, result.Action);
+                    newer = version.ToString();
                     line = line.Replace(group, version.ToString());
                 }
                 return line;
@@ -156,6 +160,8 @@ namespace sharp_ver
             // Write and add to git
 
             File.WriteAllLines(result.Path, lines);
+            if (!string.IsNullOrEmpty(older) && !string.IsNullOrEmpty(newer))
+                Console.WriteLine($"{older} -> {newer}");
             Git(ExecutingDirectory);
         }
     }
