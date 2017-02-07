@@ -16,7 +16,7 @@ namespace sharp_ver
         /// <summary>
         ///     The pattern in assemblyinfo that lists the version
         /// </summary>
-        private const string Pattern = @"^\[assembly: Assembly.+\(""(([0-9]\.){2}[0-9](?=\.?))";
+        private const string Pattern = @"^\[assembly: Assembly.+\(""(([0-9]+\.){2}[0-9]+(?=\.?))";
 
         /// <summary>
         ///     The pattern for finding words that represent reducing from a number
