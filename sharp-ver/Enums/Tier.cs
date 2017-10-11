@@ -1,6 +1,6 @@
-namespace sharp_ver
+namespace sharp_ver.Enums
 {
-    public enum SemanticVersionTier
+    public enum Tier
     {
         Patch,
         Minor,
